@@ -459,7 +459,7 @@ def generate_daily_activities(admissions_df, staff_df):
     print(f"[DONE] Generated {len(df)} daily activity records")
     return df
 
-def generate_procedures(admissions_df, procedures_df, staff_df):
+def generate_procedure_events(admissions_df, procedures_df, staff_df):
     """Generate procedure events"""
     print(f"Generating procedure events...")
     
@@ -634,7 +634,7 @@ def main():
     mar_df = generate_medication_administration(admissions_df, medications_df, staff_df)
     vitals_df = generate_vital_signs(admissions_df, staff_df)
     activities_df = generate_daily_activities(admissions_df, staff_df)
-    procedures_events_df = generate_procedures(admissions_df, procedures_df, staff_df)
+    procedures_events_df = generate_procedure_events(admissions_df, procedures_df, staff_df)
     labs_df = generate_lab_results(admissions_df, staff_df)
     goals_df = generate_care_plan_goals(admissions_df, staff_df)
     
