@@ -46,7 +46,8 @@ with col3:
 
 if clear_button:
     st.session_state.selected_patient = None
-    st.experimental_rerun()
+    st.session_state.selected_admission = None
+    st.rerun()
 
 # Search and display patients
 if search_button and search_term:
@@ -71,10 +72,11 @@ if search_button and search_term:
                     st.caption(f"Ward: {patient['ward_name']} | Bed: {patient['bed_number']} | Admitted: {admission_display} | Discharged: {discharge_display} | Dx: {patient['diagnosis_name']}")
                 
                 with col_action:
-                    if st.button(f"View", key=f"view_{patient['patient_id']}"):
+                    # Use admission_id for unique key (patient can have multiple admissions)
+                    if st.button(f"View", key=f"view_{patient['admission_id']}"):
                         st.session_state.selected_patient = patient['patient_id']
                         st.session_state.selected_admission = patient['admission_id']
-                        st.experimental_rerun()
+                        st.rerun()
                 
                 st.markdown("---")
         else:
