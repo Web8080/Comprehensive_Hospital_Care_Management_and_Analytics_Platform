@@ -4,7 +4,7 @@
 
 **Author:** Victor Ibhafidon  
 **Institution:** Independent Research  
-**Date:** January 2025  
+**Date:** September 2025  
 **Version:** 1.0
 
 ---
