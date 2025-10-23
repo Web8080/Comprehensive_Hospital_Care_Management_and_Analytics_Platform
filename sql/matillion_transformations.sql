@@ -4,7 +4,7 @@
 -- ==================================================================
 --
 -- These SQL scripts are designed to be used in Matillion ETL jobs
--- Copy and paste these into your Matillion transformation components
+-- Copy and paste these into Matillion transformation components
 --
 -- Pipeline: BRONZE → SILVER → GOLD
 --
