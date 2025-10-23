@@ -24,21 +24,23 @@ QUERY_AVG_LENGTH_OF_STAY = """
 SELECT 
     ROUND(AVG(length_of_stay), 1) as avg_los
 FROM fact_admissions
-WHERE discharge_date >= CURRENT_DATE - INTERVAL '30 days'
+WHERE discharge_date >= (SELECT MAX(discharge_date) FROM fact_admissions) - INTERVAL '60 days'
+  AND discharge_date IS NOT NULL
 """
 
 QUERY_READMISSION_RATE = """
 SELECT 
     ROUND(SUM(CASE WHEN is_readmission THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) as readmission_rate
 FROM fact_admissions
-WHERE discharge_date >= CURRENT_DATE - INTERVAL '30 days'
+WHERE discharge_date >= (SELECT MAX(discharge_date) FROM fact_admissions) - INTERVAL '60 days'
+  AND discharge_date IS NOT NULL
 """
 
 QUERY_TODAY_ADMISSIONS = """
 SELECT 
     COUNT(*) as today_admissions
 FROM fact_admissions
-WHERE admission_date = CURRENT_DATE
+WHERE admission_date = (SELECT MAX(admission_date) FROM fact_admissions)
 """
 
 QUERY_ADMISSION_TRENDS = """
@@ -57,7 +59,8 @@ SELECT
     COUNT(*) as admission_count
 FROM fact_admissions a
 JOIN dim_wards w ON a.ward_id = w.ward_id
-WHERE a.discharge_date >= CURRENT_DATE - INTERVAL '90 days'
+WHERE a.discharge_date >= (SELECT MAX(discharge_date) FROM fact_admissions) - INTERVAL '120 days'
+  AND a.discharge_date IS NOT NULL
 GROUP BY w.department
 ORDER BY total_revenue DESC
 """
@@ -69,7 +72,7 @@ SELECT
     COUNT(*) as count
 FROM fact_admissions a
 JOIN dim_diagnoses d ON a.primary_diagnosis_id = d.diagnosis_id
-WHERE a.admission_date >= CURRENT_DATE - INTERVAL '180 days'
+WHERE a.admission_date >= (SELECT MAX(admission_date) FROM fact_admissions) - INTERVAL '180 days'
 GROUP BY d.diagnosis_name, d.category
 ORDER BY count DESC
 LIMIT 10
@@ -348,7 +351,8 @@ SELECT
     ROUND(SUM(CASE WHEN a.is_readmission THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) as readmission_rate
 FROM fact_admissions a
 JOIN dim_diagnoses d ON a.primary_diagnosis_id = d.diagnosis_id
-WHERE a.discharge_date >= CURRENT_DATE - INTERVAL '180 days'
+WHERE a.discharge_date >= (SELECT MAX(discharge_date) FROM fact_admissions) - INTERVAL '180 days'
+  AND a.discharge_date IS NOT NULL
 GROUP BY d.diagnosis_name, d.category
 HAVING COUNT(*) >= 10
 ORDER BY readmission_rate DESC
@@ -365,7 +369,8 @@ SELECT
     MAX(a.length_of_stay) as max_los
 FROM fact_admissions a
 JOIN dim_wards w ON a.ward_id = w.ward_id
-WHERE a.discharge_date >= CURRENT_DATE - INTERVAL '90 days'
+WHERE a.discharge_date >= (SELECT MAX(discharge_date) FROM fact_admissions) - INTERVAL '120 days'
+  AND a.discharge_date IS NOT NULL
 GROUP BY w.ward_name, w.ward_type
 ORDER BY avg_los DESC
 """
