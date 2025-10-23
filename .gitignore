@@ -63,3 +63,7 @@ dbt_project/logs/
 # Streamlit
 .streamlit/secrets.toml
 
+# Documentation - exclude all .md except README.md
+*.md
+!README.md
+
