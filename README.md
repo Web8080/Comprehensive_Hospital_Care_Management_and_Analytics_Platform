@@ -1,11 +1,15 @@
 # MediCare Analytics Platform
 
 **Author:** Victor Ibhafidon  
-**A comprehensive hospital data analytics platform demonstrating end-to-end data engineering and business intelligence**
+**Production healthcare data warehouse with end-to-end ETL pipeline and real-time analytics dashboards**
+
+## Project Description
+
+An enterprise-grade hospital analytics platform integrating **Snowflake** cloud data warehouse, **Matillion** ETL orchestration, **Streamlit** real-time dashboards, and **Plotly** interactive visualizations. The system processes multi-ward hospital operations data through a medallion architecture (Bronze-Silver-Gold), implementing star schema dimensional modeling to deliver operational KPIs, clinical decision support, medication tracking, and quality outcome analytics for healthcare organizations.
 
 ## Executive Summary
 
-MediCare Analytics Platform is a production-ready healthcare data warehouse and analytics solution built for multi-ward hospital operations. The system implements a complete medallion architecture (Bronze-Silver-Gold) with star schema dimensional modeling, ETL orchestration via Matillion, and interactive Streamlit dashboards delivering real-time operational and clinical insights.
+MediCare Analytics Platform is a production-ready healthcare data warehouse built for multi-ward hospital operations. The system implements dimensional modeling with 8 dimension tables and 9 fact tables, processing patient admissions, medication administration, vital signs, daily activities, and quality metrics across a 5-year historical dataset.
 
 **Key Metrics:** 500 patients | 2,000+ admissions | 50,000+ medication records | 5-year historical depth
 
