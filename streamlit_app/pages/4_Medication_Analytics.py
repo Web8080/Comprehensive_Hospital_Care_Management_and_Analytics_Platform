@@ -13,6 +13,7 @@ import streamlit as st
 import sys
 from pathlib import Path
 import plotly.express as px
+import plotly.graph_objects as go
 import pandas as pd
 from datetime import datetime
 
@@ -185,7 +186,7 @@ try:
         class_summary = top_meds.groupby('drug_class').agg({
             'administration_count': 'sum',
             'total_cost': 'sum'
-        }).reset_index().sort_values('administration_count', descending=True)
+        }).reset_index().sort_values('administration_count', ascending=False)
         
         fig3 = px.treemap(
             class_summary,
