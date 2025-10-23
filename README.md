@@ -467,14 +467,12 @@ python -c "from streamlit_app.utils.database import query_to_df; \
 
 ---
 
-## Author
+## Project Information
 
-**Victor Ibhafidon**  
-Data Platform Consultant | Healthcare Analytics Specialist
+**Lead Developer:** Victor Ibhafidon  
+**Project Type:** Healthcare Data Platform - Production System
 
-**Contact:**  
-- GitHub: [@Web8080](https://github.com/Web8080)
-- Repository: [Comprehensive Hospital Care Management Platform](https://github.com/Web8080/Comprehensive_Hospital_Care_Management_and_Analytics_Platform.git)
+**Repository:** [Comprehensive Hospital Care Management Platform](https://github.com/Web8080/Comprehensive_Hospital_Care_Management_and_Analytics_Platform.git)
 
 ---
 
@@ -484,16 +482,17 @@ MIT License - Open source for educational and portfolio purposes
 
 ---
 
-## Acknowledgments
+## Technology Stack
 
-- **Faker** - Synthetic data generation
-- **Streamlit** - Rapid dashboard development
-- **Snowflake** - Cloud data warehouse
-- **Plotly** - Interactive visualizations
-- **Kimball** - Dimensional modeling methodology
+- **Faker** - Synthetic data generation for development/testing
+- **Streamlit** - Real-time analytics dashboards
+- **Snowflake** - Enterprise cloud data warehouse
+- **Plotly** - Interactive data visualizations
+- **Matillion** - ETL orchestration and transformation
 
 ---
 
 **Version:** 1.0.0  
 **Last Updated:** January 2025  
-**Status:** Production Ready
+**Status:** Production Ready  
+**License:** MIT
