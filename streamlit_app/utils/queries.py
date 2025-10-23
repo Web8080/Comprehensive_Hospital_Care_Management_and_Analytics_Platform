@@ -120,6 +120,7 @@ SELECT
     p.blood_type,
     a.admission_id,
     a.admission_date,
+    a.discharge_date,
     w.ward_name,
     b.bed_number,
     d.diagnosis_name,
@@ -130,13 +131,13 @@ JOIN dim_wards w ON a.ward_id = w.ward_id
 LEFT JOIN dim_beds b ON a.bed_id = b.bed_id
 JOIN dim_diagnoses d ON a.primary_diagnosis_id = d.diagnosis_id
 JOIN dim_staff s ON a.attending_doctor_id = s.staff_id
-WHERE (a.discharge_date IS NULL OR a.discharge_date >= CURRENT_DATE)
-  AND (
+WHERE (
     p.mrn LIKE ? 
     OR LOWER(p.first_name || ' ' || p.last_name) LIKE LOWER(?)
     OR LOWER(w.ward_name) LIKE LOWER(?)
   )
 ORDER BY a.admission_date DESC
+LIMIT 20
 """
 
 QUERY_PATIENT_DETAILS = """
@@ -161,7 +162,6 @@ LEFT JOIN dim_beds b ON a.bed_id = b.bed_id
 JOIN dim_diagnoses d ON a.primary_diagnosis_id = d.diagnosis_id
 JOIN dim_staff s ON a.attending_doctor_id = s.staff_id
 WHERE p.patient_id = ?
-  AND (a.discharge_date IS NULL OR a.discharge_date >= CURRENT_DATE)
 ORDER BY a.admission_date DESC
 LIMIT 1
 """
