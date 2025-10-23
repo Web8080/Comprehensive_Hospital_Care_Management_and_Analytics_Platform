@@ -86,7 +86,8 @@ if search_button and search_term:
         st.error(f"Error searching patients: {e}")
 
 # Display selected patient details
-if 'selected_patient' in st.session_state and st.session_state.selected_patient:
+if 'selected_patient' in st.session_state and st.session_state.selected_patient is not None:
+    st.markdown("---")
     try:
         patient_id = st.session_state.selected_patient
         admission_id = st.session_state.selected_admission
@@ -469,9 +470,9 @@ if 'selected_patient' in st.session_state and st.session_state.selected_patient:
         st.error(f"Error loading patient details: {e}")
         import traceback
         st.code(traceback.format_exc())
-
-else:
-    st.info("Search for a patient above to view their care plan")
+elif not ('selected_patient' in st.session_state and st.session_state.selected_patient):
+    if not (search_button and search_term):
+        st.info("Search for a patient above to view their care plan")
 
 st.markdown("---")
 st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
