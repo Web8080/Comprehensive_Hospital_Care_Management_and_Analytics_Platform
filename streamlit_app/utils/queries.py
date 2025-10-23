@@ -304,7 +304,7 @@ SELECT
 FROM fact_medication_administration mar
 JOIN fact_admissions a ON mar.admission_id = a.admission_id
 JOIN dim_wards w ON a.ward_id = w.ward_id
-WHERE mar.scheduled_datetime >= CURRENT_DATE - INTERVAL '7 days'
+WHERE mar.scheduled_datetime >= (SELECT MAX(scheduled_datetime) FROM fact_medication_administration) - INTERVAL '30 days'
 GROUP BY w.ward_name
 ORDER BY adherence_rate
 """
@@ -317,7 +317,7 @@ SELECT
 FROM fact_medication_administration mar
 JOIN fact_admissions a ON mar.admission_id = a.admission_id
 JOIN dim_wards w ON a.ward_id = w.ward_id
-WHERE mar.scheduled_datetime >= CURRENT_DATE - INTERVAL '30 days'
+WHERE mar.scheduled_datetime >= (SELECT MAX(scheduled_datetime) FROM fact_medication_administration) - INTERVAL '60 days'
   AND mar.status IN ('Missed', 'Refused', 'Held')
 GROUP BY w.ward_name, mar.status
 ORDER BY w.ward_name, count DESC
@@ -331,7 +331,7 @@ SELECT
     SUM(m.cost_per_unit) as total_cost
 FROM fact_medication_administration mar
 JOIN dim_medications m ON mar.medication_id = m.medication_id
-WHERE mar.scheduled_datetime >= CURRENT_DATE - INTERVAL '30 days'
+WHERE mar.scheduled_datetime >= (SELECT MAX(scheduled_datetime) FROM fact_medication_administration) - INTERVAL '90 days'
 GROUP BY m.medication_id, m.drug_name, m.drug_class
 ORDER BY administration_count DESC
 LIMIT 15

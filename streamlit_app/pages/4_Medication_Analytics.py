@@ -31,7 +31,7 @@ st.title("Medication Analytics Dashboard")
 st.markdown("Medication administration tracking, adherence, and safety metrics")
 
 # KPI Cards
-st.subheader("Medication Administration Overview (Last 7 Days)")
+st.subheader("Medication Administration Overview (Historical Data)")
 
 try:
     adherence_data = query_to_df(QUERY_MEDICATION_ADHERENCE)
@@ -144,7 +144,7 @@ with col2:
 st.markdown("---")
 
 # Top Medications
-st.subheader("Most Administered Medications (Last 30 Days)")
+st.subheader("Most Administered Medications (Last 90 Days of Data)")
 
 try:
     top_meds = query_to_df(QUERY_TOP_MEDICATIONS)
@@ -213,7 +213,7 @@ try:
         COUNT(*) as scheduled_count,
         SUM(CASE WHEN status = 'Given' THEN 1 ELSE 0 END) as given_count
     FROM fact_medication_administration
-    WHERE scheduled_datetime >= CURRENT_DATE - INTERVAL '7 days'
+    WHERE scheduled_datetime >= (SELECT MAX(scheduled_datetime) FROM fact_medication_administration) - INTERVAL '30 days'
     GROUP BY EXTRACT(HOUR FROM scheduled_datetime)
     ORDER BY hour
     """

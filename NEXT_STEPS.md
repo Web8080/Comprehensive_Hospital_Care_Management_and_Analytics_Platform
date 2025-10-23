@@ -163,7 +163,7 @@ streamlit run streamlit_app/app.py
 # Commit changes
 git add .
 git commit -m "Your message"
-git push https://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@github.com/Web8080/Comprehensive_Hospital_Care_Management_and_Analytics_Platform.git main
+git push https://YOUR_TOKEN_HERE@github.com/Web8080/Comprehensive_Hospital_Care_Management_and_Analytics_Platform.git main
 ```
 
 ---
