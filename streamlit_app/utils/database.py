@@ -32,7 +32,8 @@ class DatabaseConnection:
     def connect(self):
         """Establish database connection"""
         if self.db_type == 'duckdb':
-            self.conn = duckdb.connect(DATABASE_PATH)
+            # Use read-only mode to avoid file locking issues with Streamlit multi-page
+            self.conn = duckdb.connect(DATABASE_PATH, read_only=True)
             return self.conn
         elif self.db_type == 'snowflake':
             try:
@@ -118,8 +119,8 @@ def initialize_database_from_csv():
     
     print("Initializing DuckDB database from CSV files...")
     
-    db = get_db_connection()
-    conn = db.connect()
+    # Use read-write mode for initialization
+    conn = duckdb.connect(DATABASE_PATH, read_only=False)
     
     # Path to raw data
     raw_data_dir = Path(__file__).parent.parent.parent / "data" / "raw"
