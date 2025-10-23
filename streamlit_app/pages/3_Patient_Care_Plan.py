@@ -62,9 +62,13 @@ if search_button and search_term:
                 col_info, col_action = st.columns([4, 1])
                 
                 with col_info:
-                    age = (datetime.now().date() - patient['date_of_birth']).days // 365
+                    # Convert to date if timestamp
+                    dob = pd.to_datetime(patient['date_of_birth']).date() if pd.notna(patient['date_of_birth']) else None
+                    age = (datetime.now().date() - dob).days // 365 if dob else 'N/A'
                     st.write(f"**{patient['patient_name']}** | MRN: {patient['mrn']} | Age: {age} | {patient['gender']} | Blood Type: {patient['blood_type']}")
-                    st.caption(f"Ward: {patient['ward_name']} | Bed: {patient['bed_number']} | Admitted: {patient['admission_date']} | Dx: {patient['diagnosis_name']}")
+                    admission_display = patient['admission_date'] if pd.notna(patient['admission_date']) else 'N/A'
+                    discharge_display = patient['discharge_date'] if pd.notna(patient['discharge_date']) else 'Current'
+                    st.caption(f"Ward: {patient['ward_name']} | Bed: {patient['bed_number']} | Admitted: {admission_display} | Discharged: {discharge_display} | Dx: {patient['diagnosis_name']}")
                 
                 with col_action:
                     if st.button(f"View", key=f"view_{patient['patient_id']}"):
@@ -97,7 +101,8 @@ if 'selected_patient' in st.session_state and st.session_state.selected_patient:
             header_col1, header_col2, header_col3, header_col4 = st.columns(4)
             
             with header_col1:
-                age = (datetime.now().date() - p['date_of_birth']).days // 365
+                dob = pd.to_datetime(p['date_of_birth']).date() if pd.notna(p['date_of_birth']) else None
+                age = (datetime.now().date() - dob).days // 365 if dob else 'N/A'
                 st.metric("Patient", f"{p['first_name']} {p['last_name']}")
                 st.caption(f"MRN: {p['mrn']} | Age: {age} | {p['gender']}")
             
@@ -110,9 +115,19 @@ if 'selected_patient' in st.session_state and st.session_state.selected_patient:
                 st.caption(p['diagnosis_name'])
             
             with header_col4:
-                los = (datetime.now().date() - p['admission_date']).days
-                st.metric("Length of Stay", f"{los} days")
-                st.caption(f"Admitted: {p['admission_date']}")
+                adm_date = pd.to_datetime(p['admission_date']).date() if pd.notna(p['admission_date']) else None
+                if adm_date and p['discharge_date'] and pd.notna(p['discharge_date']):
+                    disch_date = pd.to_datetime(p['discharge_date']).date()
+                    los = (disch_date - adm_date).days
+                    st.metric("Length of Stay", f"{los} days")
+                    st.caption(f"Admitted: {p['admission_date']} | Discharged: {p['discharge_date']}")
+                elif adm_date:
+                    los = (datetime.now().date() - adm_date).days
+                    st.metric("Length of Stay", f"{los} days (ongoing)")
+                    st.caption(f"Admitted: {p['admission_date']}")
+                else:
+                    st.metric("Length of Stay", "N/A")
+                    st.caption("No admission date")
             
             st.markdown("---")
             
@@ -187,7 +202,7 @@ if 'selected_patient' in st.session_state and st.session_state.selected_patient:
                                 return ''
                             
                             st.dataframe(
-                                display_df.style.applymap(color_status, subset=['Status']),
+                                display_df.style.map(color_status, subset=['Status']),
                                 hide_index=True,
                                 use_container_width=True
                             )
@@ -396,7 +411,7 @@ if 'selected_patient' in st.session_state and st.session_state.selected_patient:
                                 return ''
                             
                             st.dataframe(
-                                display_df.style.applymap(highlight_abnormal, subset=['Flag']),
+                                display_df.style.map(highlight_abnormal, subset=['Flag']),
                                 hide_index=True,
                                 use_container_width=True
                             )

@@ -83,7 +83,7 @@ try:
                 return ''
             
             st.dataframe(
-                display_df.style.applymap(highlight_occupancy, subset=['Occupancy %']),
+                display_df.style.map(highlight_occupancy, subset=['Occupancy %']),
                 hide_index=True,
                 use_container_width=True,
                 height=400
